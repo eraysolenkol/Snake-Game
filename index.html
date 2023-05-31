@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <canvas class="snake-game" width="360" height="360">
+            Sorry, your browser doesn't support canvas.
+        </canvas>
+        <h1>Scoreboard</h1>
+        <div id="scoreboard">
+
+        </div>
+    </div>
+    <script src="snake.js"></script>
+    <script>
+        const canvas = document.getElementsByClassName('snake-game')[0];
+        const ctx = canvas.getContext('2d');
+        const game = new SnakeGame(canvas, ctx); 
+        game.updateScoreboard();
+        game.init();
+    </script>
+</body>
+</html>
