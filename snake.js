@@ -5,6 +5,9 @@ class SnakeGame {
         setInterval(this.loop.bind(this), 100);
         document.addEventListener('keydown', this.onPressKey.bind(this));
         this.scoreboard = document.getElementById("scoreboard"); 
+        this.foodUrl = "apple.png";
+        this.snakeHeadUrl = "snake_head.png";
+        this.snakeBodyUrl = "snake_body.png";
     }
 
     init() {
@@ -24,6 +27,12 @@ class SnakeGame {
             y: 0
         };
         this.updateScoreboard();
+        this.snakeHeadImage = new Image();
+        this.snakeHeadImage.src = this.snakeHeadUrl;
+        this.snakeBodyImage = new Image();
+        this.snakeBodyImage.src = this.snakeBodyUrl;
+        this.foodImage = new Image();
+        this.foodImage.src = this.foodUrl;
     }
 
     loop() {
@@ -100,17 +109,28 @@ class SnakeGame {
         this.init();
     }
 
+    rotateAndDrawImage(image, x, y, angle) {
+        this.ctx.save();
+        this.ctx.translate(x + this.cellSize / 2, y + this.cellSize / 2);
+        this.ctx.rotate(angle);
+        this.ctx.drawImage(image, -this.cellSize / 2, -this.cellSize / 2, this.cellSize - 2, this.cellSize - 2);
+        this.ctx.restore();
+    }
+
     draw() {
         // drawing background
         this.ctx.fillStyle = '#000000';
         this.ctx.fillRect(0,0, this.canvas.width, this.canvas.height);
         // drawing food
-        this.ctx.fillStyle = '#ff0000';
-        this.ctx.fillRect(this.food.x, this.food.y , this.cellSize - 5, this.cellSize - 5);
+        this.ctx.drawImage(this.foodImage, this.food.x, this.food.y , this.cellSize, this.cellSize);
         //drawing snake
-        this.ctx.fillStyle = '#ffffff';
         for (let i = 0; i < this.snake.length; i++) {
-            this.ctx.fillRect(this.snake[i].x, this.snake[i].y , this.cellSize - 3 , this.cellSize - 3);
+            if (i === 0) {
+                const angle = Math.atan2(this.velocity.y, this.velocity.x);
+                this.rotateAndDrawImage(this.snakeHeadImage, this.snake[i].x, this.snake[i].y, angle);
+            } else {
+                this.ctx.drawImage(this.snakeBodyImage, this.snake[i].x, this.snake[i].y , this.cellSize -2, this.cellSize-2);
+            }
         }
         //drawing score text
         this.ctx.fillStyle = '#00ff00';
