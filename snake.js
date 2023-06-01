@@ -8,6 +8,8 @@ class SnakeGame {
         this.foodUrl = "images/apple.png";
         this.snakeHeadUrl = "images/snake_head.png";
         this.snakeBodyUrl = "images/snake_body.png";
+        this.foodAudio = new Audio("audio/food.mp3");
+        this.foodAudio.volume = 0.2; 
     }
 
 
@@ -210,6 +212,7 @@ class SnakeGame {
                     }
                 }
             }
+            this.foodAudio.play();
             this.snake.push(newTail);
             this.score += 5;
         }
