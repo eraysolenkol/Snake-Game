@@ -124,22 +124,50 @@ class SnakeGame {
             x: Math.floor(Math.random() * this.canvas.width / this.cellSize) * this.cellSize,
             y: Math.floor(Math.random() * this.canvas.height / this.cellSize) * this.cellSize
         };
+        let isValidPosition = false;
+        while (!isValidPosition) {
+            isValidPosition = true;
+            for (let i = 0; i < this.snake.length; i++) {
+                if (this.snake[i].x === this.food.x && this.snake[i].y === this.food.y) {
+                    this.food = {
+                        x: Math.floor(Math.random() * this.canvas.width / this.cellSize) * this.cellSize,
+                        y: Math.floor(Math.random() * this.canvas.height / this.cellSize) * this.cellSize
+                    };
+                    isValidPosition = false;
+                    break;
+                }
+            }
+        }
     }
 
     checkCollision() {
         // food collision
         if (this.snake[0].x === this.food.x && this.snake[0].y === this.food.y) {
             this.createRandomFood();
-            const tail = this.snake[this.snake.length-1]; 
+            const tail = this.snake[this.snake.length - 1];
+            let newTail;
             if (this.velocity.x === 1) {
-                this.snake.push({x: tail.x - this.cellSize, y:tail.y});
+                newTail = { x: tail.x - this.cellSize, y: tail.y };
             } else if (this.velocity.x === -1) {
-                this.snake.push({x: tail.x + this.cellSize, y:tail.y});
+                newTail = { x: tail.x + this.cellSize, y: tail.y };
             } else if (this.velocity.y === 1) {
-                this.snake.push({x: tail.x, y:tail.y - this.cellSize});
+                newTail = { x: tail.x, y: tail.y - this.cellSize };
             } else if (this.velocity.y === -1) {
-                this.snake.push({x: tail.x, y:tail.y + this.cellSize});
+                newTail = { x: tail.x, y: tail.y + this.cellSize };
             }
+            let isValidPosition = false;
+            while (!isValidPosition) {
+                isValidPosition = true;
+                for (let i = 0; i < this.snake.length; i++) {
+                    if (this.snake[i].x === newTail.x && this.snake[i].y === newTail.y) {
+                        newTail.x += Math.random() > 0.5 ? this.cellSize : -this.cellSize;
+                        newTail.y += Math.random() > 0.5 ? this.cellSize : -this.cellSize;
+                        isValidPosition = false;
+                        break;
+                    }
+                }
+            }
+            this.snake.push(newTail);
             this.score += 5;
         }
         // self collision
